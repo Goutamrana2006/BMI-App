@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ultimate BMI App</title>
+
+<style>
+body{
+    font-family: Arial;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* Card */
+.container{
+    background: rgba(255,255,255,0.1);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    color: white;
+    width: 350px;
+}
+
+/* Inputs */
+input{
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+}
+
+/* Button */
+button{
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #00c6ff;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover{
+    background: #0072ff;
+}
+
+/* Result */
+#result{
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* Meter */
+.bar{
+    margin-top: 15px;
+    height: 15px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.fill{
+    height: 100%;
+    width: 0%;
+    transition: 1s;
+}
+
+/* Tips */
+#tips{
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* History */
+#history{
+    margin-top: 15px;
+    font-size: 13px;
+    text-align: left;
+}
+/* 🔥 Title Box */
+.title-box{
+    display: inline-block;
+    padding: 12px 25px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+
+    /* 🌈 Gradient Background */
+    background: linear-gradient(135deg, #141e30, #243b55);
+color: white;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 2px;
+
+    /* ✨ Glow + Shadow */
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+
+    /* 🚀 Animation */
+    animation: float 2s infinite ease-in-out;
+}
+
+/* ✨ Floating Animation */
+@keyframes float{
+    0%{ transform: translateY(0px); }
+    50%{ transform: translateY(-5px); }
+    100%{ transform: translateY(0px); }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="title-box">⚖️ BMI APP</div>
+
+<input type="number" id="height" placeholder="Height (cm)">
+<input type="number" id="weight" placeholder="Weight (kg)">
+
+<button onclick="bmi()">Calculate</button>
+<button onclick="clearHistory()">Clear History</button>
+
+<div id="result"></div>
+
+<div class="bar">
+    <div id="fill" class="fill"></div>
+</div>
+
+<div id="tips"></div>
+
+<div id="history"></div>
+
+</div>
+
+<script>
+
+// Load history on start
+window.onload = function(){
+    document.getElementById("history").innerHTML =
+        localStorage.getItem("bmiHistory") || "";
+}
+
+function bmi(){
+
+    let height = document.getElementById("height").value;
+    let weight = document.getElementById("weight").value;
+
+    if(height === "" || weight === ""){
+        alert("Enter all values!");
+        return;
+    }
+
+    let h = height / 100;
+    let value = weight / (h*h);
+
+    let status="", color="", tip="";
+
+    if(value < 18.5){
+        status="Underweight";
+        color="#3498db";
+        tip="Eat more healthy food 🍎";
+    }
+    else if(value < 25){
+        status="Normal";
+        color="#2ecc71";
+        tip="Great! Keep it up 💪";
+    }
+    else if(value < 30){
+        status="Overweight";
+        color="#f39c12";
+        tip="Exercise daily 🏃";
+    }
+    else{
+        status="Obese";
+        color="#e74c3c";
+        tip="Consult doctor ⚠️";
+    }
+
+    // Result
+    document.getElementById("result").innerHTML =
+        `BMI: ${value.toFixed(2)} (${status})`;
+    document.getElementById("result").style.background = color;
+
+    // Meter
+    let percent = (value/40)*100;
+    document.getElementById("fill").style.width = percent+"%";
+    document.getElementById("fill").style.background = color;
+
+    // Tips
+    document.getElementById("tips").innerHTML = tip;
+
+    // Save History
+    let old = localStorage.getItem("bmiHistory") || "";
+    let entry = `BMI: ${value.toFixed(2)} (${status})<br>`;
+    localStorage.setItem("bmiHistory", old + entry);
+
+    document.getElementById("history").innerHTML = old + entry;
+}
+
+// Clear History
+function clearHistory(){
+    localStorage.removeItem("bmiHistory");
+    document.getElementById("history").innerHTML = "";
+}
+
+</script>
+
+</body>
+</html>
