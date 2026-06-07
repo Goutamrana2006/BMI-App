@@ -37,7 +37,7 @@ This project was developed to strengthen frontend development skills and demonst
 * CSS Animations
 * Glassmorphism UI
 ---
-## 📊 BMI Categorie
+## 📊 BMI Categories
 | BMI Range    | Status        |
 | ------------ | ------------- |
 | Below 18.5   | Underweight   |
